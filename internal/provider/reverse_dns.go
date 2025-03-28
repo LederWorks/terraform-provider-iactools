@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// ReverseDNSIPv4 generates the reverse DNS PTR record for an IPv4 address.
 func ReverseDNSIPv4(ipAddress string) string {
 	splitted := strings.Split(ipAddress, ".")
 	parts := make([]string, 0)
@@ -21,6 +22,7 @@ func ReverseDNSIPv4(ipAddress string) string {
 	return fmt.Sprintf("%v.in-addr.arpa.", joined)
 }
 
+// ReverseDNSIPv6 generates the reverse DNS PTR record for an IPv6 address.
 func ReverseDNSIPv6(ipAddress net.IP) string {
 	expandedAddress := expandIPv6Address(ipAddress)
 	splitted := strings.Split(strings.ReplaceAll(expandedAddress, ":", ""), "")
