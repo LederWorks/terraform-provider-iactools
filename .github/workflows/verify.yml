@@ -3,9 +3,15 @@
 # SPDX-License-Identifier: MPL-2.0
 
 name: Verify Commits
-# on:
-#   pull_request:
-#     branches: [ main ]
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'The branch to run the workflow on'
+        required: true
+        default: 'main'
+
 jobs:
   build:
     name: Build Project

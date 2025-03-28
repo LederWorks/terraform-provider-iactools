@@ -48,7 +48,7 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 					{
 						Config: fmt.Sprintf(`
                             output "result" {
-                                value = provider::iactools::inverse_cidr("%s", "%s")
+                                value = provider::iactools::inverse_cidrs("%s", "%s")
                             }
                         `, testCase.parentCIDR, testCase.childCIDR),
 						Check: resource.ComposeAggregateTestCheckFunc(
@@ -103,32 +103,32 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 		"empty-parent-cidr": {
 			parentCIDR: "",
 			childCIDR:  "192.168.1.0/24",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*The parent_cidr.*argument must be provided and valid`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*The parent_cidr.*argument must be provided and valid`,
 		},
 		"empty-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*The child_cidr.*argument must be provided and valid`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*The child_cidr.*argument must be provided and valid`,
 		},
 		"invalid-parent-cidr": {
 			parentCIDR: "invalid-cidr",
 			childCIDR:  "192.168.1.0/24",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*invalid parent CIDR: invalid CIDR address: invalid-cidr`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid parent CIDR: invalid CIDR address: invalid-cidr`,
 		},
 		"invalid-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "invalid-cidr",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*invalid child CIDR: invalid CIDR address: invalid-cidr`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid child CIDR: invalid CIDR address: invalid-cidr`,
 		},
 		"parentless-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "172.16.0.0/24",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*Error calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
 		},
 		"childless-parent-cidr": {
 			parentCIDR: "192.168.84.42/32",
 			childCIDR:  "192.168.84.42/32",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*Error calculating.*inverse CIDRs: child CIDR not found within parent CIDR`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error calculating.*inverse CIDRs: child CIDR not found within parent CIDR`,
 		},
 	}
 
@@ -143,7 +143,7 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 					{
 						Config: fmt.Sprintf(`
 													output "result" {
-															value = provider::iactools::inverse_cidr("%s", "%s")
+															value = provider::iactools::inverse_cidrs("%s", "%s")
 													}
 											`, testCase.parentCIDR, testCase.childCIDR),
 						ExpectError: regexp.MustCompile(testCase.error),

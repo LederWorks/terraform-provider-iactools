@@ -1,0 +1,42 @@
+name: GitVersion
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.10.2
+      with:
+        versionSpec: '5.x'
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Git Configuration
+      uses: oleksiyrudenko/gha-git-credentials@v2-latest
+      with:
+        token: '${{ secrets.GITHUB_TOKEN }}'
+
+    - name: Determine Version
+      id:   gitversion
+      uses: gittools/actions/gitversion/execute@v0.10.2
+      with:
+        useConfigFile: true
+        configFilePath: ./.github/gitversionconfig.yml
+
+    - name: Display GitVersion Output
+      run: echo "The determined version is v${{ steps.gitversion.outputs.MajorMinorPatch }}"
+
+    - name: Create Git Semver Tag
+      run: git tag --annotate --message "PR#${{ github.event.number }}" v${{ steps.gitversion.outputs.MajorMinorPatch }}
+
+    - name: Push tags to repository
+      run: git push --force --verbose --tags

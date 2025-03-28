@@ -12,18 +12,25 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/function"
 )
 
-var _ function.Function = (*ReverseDNSFunction)(nil)
+// Ensure the implementation satisfies the expected interfaces.
+var (
+	_ function.Function = (*ReverseDNSFunction)(nil)
+)
 
+// NewReverseDNSFunction is a helper function to create a new instance of ReverseDNSFunction.
 func NewReverseDNSFunction() function.Function {
 	return &ReverseDNSFunction{}
 }
 
+// ReverseDNSFunction is the struct for the inverse CIDR function.
 type ReverseDNSFunction struct{}
 
+// Metadata sets the metadata for the function.
 func (f *ReverseDNSFunction) Metadata(_ context.Context, _ function.MetadataRequest, response *function.MetadataResponse) {
 	response.Name = "reverse_dns"
 }
 
+// Definition sets the definition for the function.
 func (f *ReverseDNSFunction) Definition(_ context.Context, _ function.DefinitionRequest, response *function.DefinitionResponse) {
 	response.Definition = function.Definition{
 		Summary:     "Calculate the reverse DNS name of an IP address",
@@ -39,6 +46,7 @@ func (f *ReverseDNSFunction) Definition(_ context.Context, _ function.Definition
 	}
 }
 
+// Run executes the reverse DNS function.
 func (f *ReverseDNSFunction) Run(ctx context.Context, request function.RunRequest, response *function.RunResponse) {
 	var input string
 

@@ -88,6 +88,7 @@ func (p *iactoolsProvider) Functions(ctx context.Context) []func() function.Func
 	}
 }
 
+// New creates a new instance of the iactools provider with the specified version.
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
 		return &iactoolsProvider{

@@ -28,7 +28,7 @@ type InverseCIDRFunction struct{}
 
 // Metadata sets the metadata for the function.
 func (r InverseCIDRFunction) Metadata(_ context.Context, req function.MetadataRequest, resp *function.MetadataResponse) {
-	resp.Name = "inverse_cidr"
+	resp.Name = "inverse_cidrs"
 }
 
 // Definition sets the definition for the function.
