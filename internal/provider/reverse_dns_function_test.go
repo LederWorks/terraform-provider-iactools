@@ -68,11 +68,11 @@ func TestReverseDnsFunction_Invalid(t *testing.T) {
 	}{
 		"empty-ip-address": {
 			ipAddress: "",
-			error:     "The ip_address.*argument must be provided and valid",
+			error:     `(?s)Call to function "provider::iactools::reverse_dns" failed.*The ip_address.*argument must be provided and valid`,
 		},
 		"invalid-ip-address": {
 			ipAddress: "a.b.c.d",
-			error:     "Cannot parse IP.*address 'a.b.c.d'",
+			error:     `(?s)Call to function "provider::iactools::reverse_dns" failed.*Cannot parse IP.*address 'a.b.c.d'`,
 		},
 	}
 	for name, testCase := range testCases {
