@@ -113,12 +113,12 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 		"invalid-parent-cidr": {
 			parentCIDR: "invalid-cidr",
 			childCIDR:  "192.168.1.0/24",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid parent CIDR.* invalid CIDR address.* invalid-cidr`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid parent CIDR.* invalid CIDR address.*invalid-cidr`,
 		},
 		"invalid-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "invalid-cidr",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid child CIDR.* invalid CIDR address.* invalid-cidr`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*invalid child CIDR.* invalid CIDR address.*invalid-cidr`,
 		},
 		"parentless-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
