@@ -125,6 +125,11 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 			childCIDR:  "172.16.0.0/24",
 			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*Error calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
 		},
+		"mask-too-large": {
+			parentCIDR: "192.168.84.42/32",
+			childCIDR:  "192.168.84.42/33",
+			error:      `(?s)Call to function "provider::iactools::inverse_cidr" failed.*Error calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
+		},
 	}
 
 	for name, testCase := range testCases {
