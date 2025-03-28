@@ -20,10 +20,15 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 		childCIDR    string
 		inverseCIDRs []string
 	}{
-		"ipv4-example": {
+		"ipv4-example-class-a": {
 			parentCIDR:   "10.103.0.0/18",
 			childCIDR:    "10.103.1.0/24",
 			inverseCIDRs: []string{"10.103.32.0/19", "10.103.16.0/20", "10.103.8.0/21", "10.103.4.0/22", "10.103.2.0/23", "10.103.0.0/24"},
+		},
+		"ipv4-example-class-c": {
+			parentCIDR:   "192.168.0.0/22",
+			childCIDR:    "192.168.3.96/27",
+			inverseCIDRs: []string{"192.168.0.0/23", "192.168.2.0/24", "192.168.3.128/25", "192.168.3.0/26", "192.168.3.64/27"},
 		},
 		"ipv6-example": {
 			parentCIDR:   "2001:db8::/44",
