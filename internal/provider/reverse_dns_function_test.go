@@ -50,7 +50,7 @@ func TestReverseDNSFunction_Valid(t *testing.T) {
 					{
 						Config: fmt.Sprintf(`
 							output "result" {
-								value = provider::ipcalc::reverse_dns("%s")
+								value = provider::iactools::reverse_dns("%s")
 							}
 						`, testCase.ipAddress),
 						Check: resource.TestCheckOutput("result", testCase.reverseDNS),
@@ -86,7 +86,7 @@ func TestReverseDnsFunction_Invalid(t *testing.T) {
 					{
 						Config: fmt.Sprintf(`
 							output "result" {
-								value = provider::ipcalc::reverse_dns("%s")
+								value = provider::iactools::reverse_dns("%s")
 							}
 						`, testCase.ipAddress),
 						ExpectError: regexp.MustCompile(testCase.error),

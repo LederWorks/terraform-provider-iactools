@@ -4,7 +4,7 @@
 
 terraform {
   required_providers {
-    ipcalc = {
+    iactools = {
       source  = "localhost/lederworks/iactools"
       version = "9999.99.99"
     }
