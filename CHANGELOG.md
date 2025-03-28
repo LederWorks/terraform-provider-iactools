@@ -23,7 +23,7 @@ ENHANCEMENTS:
 - Improved testing
 
 BUG FIXES:
-- inverse_cidr now calculates CIDR ranges with a Trie Graph
+- The inverse_cidr function now calculates CIDR ranges with a Trie Graph
 
 ## 0.1.0 (Unreleased)
 

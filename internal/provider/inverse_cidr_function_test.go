@@ -123,12 +123,12 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 		"parentless-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "172.16.0.0/24",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error.*calculating.*inverse CIDRs: child CIDR 172.16.0.0/24 is not within parent CIDR.*192.168.0.0/16`,
 		},
 		"childless-parent-cidr": {
 			parentCIDR: "192.168.84.42/32",
 			childCIDR:  "192.168.84.42/32",
-			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error calculating.*inverse CIDRs: child CIDR not found within parent CIDR`,
+			error:      `(?s)Call to function "provider::iactools::inverse_cidrs" failed.*Error.*calculating.*inverse CIDRs: child CIDR not found within parent CIDR`,
 		},
 	}
 
