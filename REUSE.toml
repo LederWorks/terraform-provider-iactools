@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "terraform-provider-iactoools"
+SPDX-PackageSupplier = "Bence Bánó <bence.bano@lederworks.com>"
+SPDX-PackageDownloadLocation = "https://github.com/lederworks/terraform-provider-iactools"
+
+[[annotations]]
+path = "*"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The terraform-provider-iactools Authors"
+SPDX-License-Identifier = "MPL-2.0"
