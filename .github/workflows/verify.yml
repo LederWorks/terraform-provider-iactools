@@ -30,7 +30,9 @@ jobs:
           args: --timeout=10m
       - id: generate_docs
         name: Generate Documentation
-        run: go generate
+        run: |
+          cd tools
+          go generate ./...
       - id: verify_docs
         name: Verify Documentation
         run: |
