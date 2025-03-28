@@ -16,7 +16,7 @@ Once you've written your provider, you'll want to [publish it on the Terraform R
 
 ## Requirements
 
-- [Terraform](https://developer.hashicorp.com/terraform/downloads) >= 1.0
+- [Terraform](https://developer.hashicorp.com/terraform/downloads) >= 1.8
 - [Go](https://golang.org/doc/install) >= 1.23
 
 ## Building The Provider

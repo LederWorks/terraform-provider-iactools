@@ -1,0 +1,21 @@
+#Copyright (c) LederWorks
+#SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+#SPDX-License-Identifier: MPL-2.0
+
+cff-version: 1.2.0
+title: terraform-provider-iactools
+message: If you use this software, please cite it as below.
+type: software
+authors:
+- family-names: Bánó
+  given-names: Bence
+  email: bence.bano@lederworks.com
+url: https://registry.terraform.io/providers/lederworks/iactools/
+license: MPL-2.0
+keywords:
+  - IaC
+  - IP
+  - go
+  - make
+  - terraform
+  - terraform-provider
