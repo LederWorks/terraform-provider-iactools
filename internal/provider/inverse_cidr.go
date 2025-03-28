@@ -1,10 +1,13 @@
+// Copyright (c) LederWorks
+// SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+// SPDX-License-Identifier: MPL-2.0
+
 package provider
 
 import (
 	"fmt"
 	"log"
 	"net"
-	"strings"
 )
 
 // InverseCIDR determines the address type and calls the appropriate function.
@@ -57,7 +60,7 @@ func splitCIDR(ipnet *net.IPNet) ([]*net.IPNet, error) {
 	return []*net.IPNet{firstSubnet, secondSubnet}, nil
 }
 
-// Helper function to get the sibling subnet
+// Helper function to get the sibling subnet.
 func getSiblingSubnet(subnets []*net.IPNet, target *net.IPNet) *net.IPNet {
 	if subnets[0].String() == target.String() {
 		return subnets[1]
@@ -65,7 +68,7 @@ func getSiblingSubnet(subnets []*net.IPNet, target *net.IPNet) *net.IPNet {
 	return subnets[0]
 }
 
-// Recursive function to find the path to the child CIDR and the inverse CIDR ranges
+// Recursive function to find the path to the child CIDR and the inverse CIDR ranges.
 func findInverseCIDRs(parentCIDR, childCIDR *net.IPNet) ([]*net.IPNet, bool) {
 	subnets, err := splitCIDR(parentCIDR)
 	if err != nil {
@@ -96,9 +99,4 @@ func convertToStringSlice(ipnets []*net.IPNet) []string {
 		result = append(result, ipnet.String())
 	}
 	return result
-}
-
-// isIPv4 checks if an IP address is IPv4.
-func isIPv4(ip net.IP) bool {
-	return strings.Contains(ip.String(), ".")
 }
