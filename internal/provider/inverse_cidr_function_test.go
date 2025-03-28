@@ -41,20 +41,31 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 				ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 				Steps: []resource.TestStep{
 					{
-						Config: fmt.Sprintf(`
-                            output "result" {
-                                value = provider::iactools::inverse_cidr("%s", "%s")
-                            }
+						Config: fmt.Sprintf(`  
+                            output "result" {  
+                                value = provider::iactools::inverse_cidr("%s", "%s")  
+                            }  
                         `, testCase.parentCIDR, testCase.childCIDR),
 						Check: resource.ComposeAggregateTestCheckFunc(
 							func(state *terraform.State) error {
-								// Get the output value
-								output := state.RootModule().Outputs["result"].Value.([]interface{})
+								outputRaw, ok := state.RootModule().Outputs["result"]
+								if !ok {
+									return fmt.Errorf("output 'result' not found")
+								}
+
+								output, ok := outputRaw.Value.([]interface{})
+								if !ok {
+									return fmt.Errorf("expected list output, got %T", outputRaw.Value)
+								}
 
 								// Convert the list of interfaces to a list of strings
 								var result []string
 								for _, v := range output {
-									result = append(result, v.(string))
+									str, ok := v.(string)
+									if !ok {
+										return fmt.Errorf("expected string in list, got %T", v)
+									}
+									result = append(result, str)
 								}
 
 								// Check that the output matches the expected result
