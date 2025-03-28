@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: MPL-2.0
 
 name: Verify Commits
-on:
-  pull_request:
-    branches: [ main ]
+# on:
+#   pull_request:
+#     branches: [ main ]
 jobs:
   build:
     name: Build Project

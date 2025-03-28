@@ -99,9 +99,10 @@ func excludeSubnets(parentNet *net.IPNet, subnets []*net.IPNet) []*net.IPNet {
 		}
 
 		if !excluded {
-			if len(parentCIDRs) == 0 || parent.String() != parentCIDRs[0].String() {
+			/* if len(parentCIDRs) == 0 || parent.String() != parentCIDRs[0].String() {
 				result = append(result, parent)
-			}
+			} */
+			result = append(result, parent)
 		} else {
 			sub1, sub2 := splitCIDR(parent)
 			parentCIDRs = append(parentCIDRs, sub1, sub2)
@@ -124,7 +125,8 @@ func splitCIDR(ipnet *net.IPNet) (*net.IPNet, *net.IPNet) {
 		Mask: net.CIDRMask(newPrefixLen, 8*len(ipnet.IP)),
 	}
 	copy(second.IP, ipnet.IP)
-	second.IP[newPrefixLen/8-1] |= 1 << (8 - newPrefixLen%8)
+	// second.IP[newPrefixLen/8-1] |= 1 << (8 - newPrefixLen%8)
+	second.IP[len(second.IP)-1] |= 1 << (7 - (newPrefixLen-1)%8)
 
 	return first, second
 }
