@@ -27,8 +27,8 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 		},
 		"ipv6-example": {
 			parentCIDR:   "2001:db8::/48",
-			childCIDR:    "2001:db8:1::/64",
-			inverseCIDRs: []string{"2001:db8:0:0:8000::/65", "2001:db8:0:0:c000::/66"},
+			childCIDR:    "2001:db8::/50",
+			inverseCIDRs: []string{"2001:db8:0:0:4000::/50", "2001:db8:0:0:8000::/49"},
 		},
 	}
 
