@@ -54,28 +54,15 @@ func (r InverseCIDRFunction) Definition(_ context.Context, _ function.Definition
 
 // Run executes the inverse CIDR function.
 func (r InverseCIDRFunction) Run(ctx context.Context, req function.RunRequest, resp *function.RunResponse) {
-	/* var args struct {
-		ParentCIDR types.String `tfsdk:"parent_cidr"`
-		ChildCIDR  types.String `tfsdk:"child_cidr"`
-	} */
 	var parentCIDR, childCIDR string
 
 	// Parse the arguments
-	// resp.Error = function.ConcatFuncErrors(resp.Error, req.Arguments.Get(ctx, &args))
 	resp.Error = function.ConcatFuncErrors(resp.Error, req.Arguments.Get(ctx, &parentCIDR, &childCIDR))
 	if resp.Error != nil {
 		return
 	}
 
 	// Validate input arguments
-	/* if args.ParentCIDR.IsNull() || args.ParentCIDR.IsUnknown() {
-		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The parent_cidr argument must be provided and valid."))
-		return
-	}
-	if args.ChildCIDR.IsNull() || args.ChildCIDR.IsUnknown() {
-		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The child_cidr argument must be provided and valid."))
-		return
-	} */
 	if parentCIDR == "" {
 		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The parent_cidr argument must be provided and valid."))
 		return
@@ -86,7 +73,6 @@ func (r InverseCIDRFunction) Run(ctx context.Context, req function.RunRequest, r
 	}
 
 	// Calculate inverse CIDRs
-	// inverseCIDRs, err := InverseCIDR(args.ParentCIDR.ValueString(), args.ChildCIDR.ValueString())
 	inverseCIDRs, err := InverseCIDR(parentCIDR, childCIDR)
 	if err != nil {
 		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError(fmt.Sprintf("Error calculating inverse CIDRs: %s", err.Error())))

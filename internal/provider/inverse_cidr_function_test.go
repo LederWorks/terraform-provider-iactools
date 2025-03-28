@@ -21,14 +21,14 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 		inverseCIDRs []string
 	}{
 		"ipv4-example": {
-			parentCIDR:   "192.168.0.0/24",
-			childCIDR:    "192.168.0.0/26",
-			inverseCIDRs: []string{"192.168.64.0/26", "192.168.128.0/25"},
+			parentCIDR:   "10.103.0.0/18",
+			childCIDR:    "10.103.1.0/24",
+			inverseCIDRs: []string{"10.103.32.0/19", "10.103.16.0/20", "10.103.8.0/21", "10.103.4.0/22", "10.103.2.0/23", "10.103.0.0/24"},
 		},
 		"ipv6-example": {
-			parentCIDR:   "2001:db8::/48",
+			parentCIDR:   "2001:db8::/44",
 			childCIDR:    "2001:db8::/50",
-			inverseCIDRs: []string{"2001:db8:0:0:4000::/50", "2001:db8:0:0:8000::/49"},
+			inverseCIDRs: []string{"2001:db8:8::/45", "2001:db8:4::/46", "2001:db8:2::/47", "2001:db8:1::/48", "2001:db8:0:8000::/49", "2001:db8:0:4000::/50"},
 		},
 	}
 
