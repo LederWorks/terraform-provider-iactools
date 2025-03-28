@@ -98,22 +98,22 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 		"empty-parent-cidr": {
 			parentCIDR: "",
 			childCIDR:  "192.168.1.0/24",
-			error:      `The parent_cidr argument must be provided and valid`,
+			error:      `(?s)Error in function call.*The parent_cidr argument must be provided and valid`,
 		},
 		"empty-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "",
-			error:      `The child_cidr argument must be provided and valid`,
+			error:      `(?s)Error in function call.*The child_cidr argument must be provided and valid`,
 		},
 		"invalid-parent-cidr": {
 			parentCIDR: "invalid-cidr",
 			childCIDR:  "192.168.1.0/24",
-			error:      `Error calculating inverse CIDRs: invalid parent CIDR: invalid CIDR address: invalid-cidr`,
+			error:      `(?s)Error in function call.*Error calculating inverse CIDRs: invalid parent CIDR: invalid CIDR address: invalid-cidr`,
 		},
 		"invalid-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "invalid-cidr",
-			error:      `Error calculating inverse CIDRs: invalid child CIDR: invalid CIDR address: invalid-cidr`,
+			error:      `(?s)Error in function call.*Error calculating inverse CIDRs: invalid child CIDR: invalid CIDR address: invalid-cidr`,
 		},
 	}
 
