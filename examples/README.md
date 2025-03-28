@@ -1,3 +1,9 @@
+<!--
+Copyright (c) LederWorks
+SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+SPDX-License-Identifier: MPL-2.0
+ -->
+
 # Examples
 
 This directory contains examples that are mostly used for documentation, but can also be run/tested manually via the Terraform CLI.
