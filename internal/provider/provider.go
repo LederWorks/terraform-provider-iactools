@@ -84,9 +84,11 @@ func (p *iactoolsProvider) DataSources(ctx context.Context) []func() datasource.
 func (p *iactoolsProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{
 		NewInverseCIDRFunction,
+		NewReverseDNSFunction,
 	}
 }
 
+// New creates a new instance of the iactools provider with the specified version.
 func New(version string) func() provider.Provider {
 	return func() provider.Provider {
 		return &iactoolsProvider{

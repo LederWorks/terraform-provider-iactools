@@ -6,11 +6,11 @@ package provider
 
 import (
 	"fmt"
+	"log"
 	"net"
-	"strings"
 )
 
-// InverseCIDR determines the address type and calls the appropriate function (IPv4 or IPv6).
+// InverseCIDR determines the address type and calls the appropriate function.
 func InverseCIDR(parentCIDR, childCIDR string) ([]string, error) {
 	_, parentNet, err := net.ParseCIDR(parentCIDR)
 	if err != nil {
@@ -22,111 +22,74 @@ func InverseCIDR(parentCIDR, childCIDR string) ([]string, error) {
 		return nil, fmt.Errorf("invalid child CIDR: %v", err)
 	}
 
-	if isIPv4(parentNet.IP) && isIPv4(childNet.IP) {
-		return InverseCIDRIPv4(parentCIDR, childCIDR)
-	} else {
-		return InverseCIDRIPv6(parentCIDR, childCIDR)
-	}
-}
-
-// InverseCIDRIPv4 calculates the inverse CIDR ranges for a given childCIDR within a parentCIDR for IPv4 addresses.
-func InverseCIDRIPv4(parentCIDR, childCIDR string) ([]string, error) {
-	_, parentNet, err := net.ParseCIDR(parentCIDR)
-	if err != nil {
-		return nil, fmt.Errorf("invalid parent CIDR: %v", err)
-	}
-
-	_, childNet, err := net.ParseCIDR(childCIDR)
-	if err != nil {
-		return nil, fmt.Errorf("invalid child CIDR: %v", err)
-	}
-
 	if !parentNet.Contains(childNet.IP) {
 		return nil, fmt.Errorf("child CIDR %s is not within parent CIDR %s", childCIDR, parentCIDR)
 	}
 
-	inverseCIDRs := excludeSubnets(parentNet, []*net.IPNet{childNet})
-	return convertToStringSlice(inverseCIDRs), nil
-}
-
-// InverseCIDRIPv6 calculates the inverse CIDR ranges for a given childCIDR within a parentCIDR for IPv4 and IPv6 addresses.
-func InverseCIDRIPv6(parentCIDR, childCIDR string) ([]string, error) {
-	_, childNet, err := net.ParseCIDR(childCIDR)
-	if err != nil {
-		return nil, fmt.Errorf("invalid child CIDR: %v", err)
+	// Find the inverse CIDRs leading to the child CIDR
+	inverseCIDRs, found := findInverseCIDRs(parentNet, childNet)
+	if !found {
+		return nil, fmt.Errorf("child CIDR not found within parent CIDR")
 	}
 
-	// Check if the childCIDR is an IPv4 address
-	if isIPv4(childNet.IP) {
-		return InverseCIDRIPv4(parentCIDR, childCIDR)
-	}
-
-	_, parentNet, err := net.ParseCIDR(parentCIDR)
-	if err != nil {
-		return nil, fmt.Errorf("invalid parent CIDR: %v", err)
-	}
-
-	if !parentNet.Contains(childNet.IP) {
-		return nil, fmt.Errorf("child CIDR %s is not within parent CIDR %s", childCIDR, parentCIDR)
-	}
-
-	inverseCIDRs := excludeSubnets(parentNet, []*net.IPNet{childNet})
 	return convertToStringSlice(inverseCIDRs), nil
 }
 
 // Helper functions
 
-// excludeSubnets calculates the inverse CIDRs excluding the given subnets from the parent network.
-func excludeSubnets(parentNet *net.IPNet, subnets []*net.IPNet) []*net.IPNet {
-	var result []*net.IPNet
-	exclude := make(map[string]struct{})
-	for _, subnet := range subnets {
-		exclude[subnet.String()] = struct{}{}
+// splitCIDR splits a CIDR into two smaller CIDRs.
+func splitCIDR(ipnet *net.IPNet) ([]*net.IPNet, error) {
+	ones, bits := ipnet.Mask.Size()
+	if ones >= bits {
+		return nil, fmt.Errorf("cannot split CIDR %s: mask size is too large", ipnet.String())
 	}
 
-	parentCIDRs := []*net.IPNet{parentNet}
-	for len(parentCIDRs) > 0 {
-		parent := parentCIDRs[0]
-		parentCIDRs = parentCIDRs[1:]
+	// Calculate the new subnet mask
+	newOnes := ones + 1
+	newMask := net.CIDRMask(newOnes, bits)
 
-		var excluded bool
-		for subnet := range exclude {
-			_, subnetNet, _ := net.ParseCIDR(subnet)
-			if subnetNet.Contains(parent.IP) && subnetNet.String() == parent.String() {
-				excluded = true
-				break
-			}
-		}
+	// Create two new subnets
+	firstIP := ipnet.IP.Mask(newMask)
+	secondIP := make(net.IP, len(firstIP))
+	copy(secondIP, firstIP)
+	secondIP[ones/8] |= 1 << (7 - uint(ones%8))
 
-		if !excluded {
-			if len(parentCIDRs) == 0 || parent.String() != parentCIDRs[0].String() {
-				result = append(result, parent)
-			}
-		} else {
-			sub1, sub2 := splitCIDR(parent)
-			parentCIDRs = append(parentCIDRs, sub1, sub2)
-		}
-	}
-	return result
+	firstSubnet := &net.IPNet{IP: firstIP, Mask: newMask}
+	secondSubnet := &net.IPNet{IP: secondIP, Mask: newMask}
+
+	return []*net.IPNet{firstSubnet, secondSubnet}, nil
 }
 
-// splitCIDR splits a CIDR into two smaller CIDRs.
-func splitCIDR(ipnet *net.IPNet) (*net.IPNet, *net.IPNet) {
-	prefixLen, _ := ipnet.Mask.Size()
-	newPrefixLen := prefixLen + 1
-
-	first := &net.IPNet{
-		IP:   ipnet.IP,
-		Mask: net.CIDRMask(newPrefixLen, 8*len(ipnet.IP)),
+// Helper function to get the sibling subnet.
+func getSiblingSubnet(subnets []*net.IPNet, target *net.IPNet) *net.IPNet {
+	if subnets[0].String() == target.String() {
+		return subnets[1]
 	}
-	second := &net.IPNet{
-		IP:   make(net.IP, len(ipnet.IP)),
-		Mask: net.CIDRMask(newPrefixLen, 8*len(ipnet.IP)),
-	}
-	copy(second.IP, ipnet.IP)
-	second.IP[newPrefixLen/8-1] |= 1 << (8 - newPrefixLen%8)
+	return subnets[0]
+}
 
-	return first, second
+// Recursive function to find the path to the child CIDR and the inverse CIDR ranges.
+func findInverseCIDRs(parentCIDR, childCIDR *net.IPNet) ([]*net.IPNet, bool) {
+	subnets, err := splitCIDR(parentCIDR)
+	if err != nil {
+		log.Printf("Error splitting CIDR %s: %v", parentCIDR, err)
+		return nil, false
+	}
+
+	for _, subnet := range subnets {
+		if subnet.Contains(childCIDR.IP) {
+			if subnet.String() == childCIDR.String() {
+				// Add the sibling CIDR when the child CIDR is found
+				return []*net.IPNet{getSiblingSubnet(subnets, subnet)}, true
+			}
+			inverseCIDRs, found := findInverseCIDRs(subnet, childCIDR)
+			if found {
+				return append([]*net.IPNet{getSiblingSubnet(subnets, subnet)}, inverseCIDRs...), true
+			}
+		}
+	}
+
+	return nil, false
 }
 
 // convertToStringSlice converts a slice of *net.IPNet to a slice of strings.
@@ -136,9 +99,4 @@ func convertToStringSlice(ipnets []*net.IPNet) []string {
 		result = append(result, ipnet.String())
 	}
 	return result
-}
-
-// isIPv4 checks if an IP address is IPv4.
-func isIPv4(ip net.IP) bool {
-	return strings.Contains(ip.String(), ".")
 }

@@ -2,4 +2,10 @@
 # SPDX-FileCopyrightText: The terraform-provider-iactools Authors
 # SPDX-License-Identifier: MPL-2.0
 
-* @lederworks/iactools
+variable "parent_cidr" {
+  type = string
+}
+
+variable "child_cidr" {
+  type = string
+}

@@ -1,4 +1,6 @@
-# Copyright (c) HashiCorp, Inc.
+# Copyright (c) LederWorks
+# SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+# SPDX-License-Identifier: MPL-2.0
 
 # Visit https://golangci-lint.run/ for usage documentation
 # and information on other useful linters
