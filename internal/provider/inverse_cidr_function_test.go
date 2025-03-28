@@ -98,12 +98,12 @@ func TestInverseCidrFunction_Invalid(t *testing.T) {
 		"empty-parent-cidr": {
 			parentCIDR: "",
 			childCIDR:  "192.168.1.0/24",
-			error:      `The parent_cidr argument must be provided and valid.`,
+			error:      `The parent_cidr argument must be provided and valid`,
 		},
 		"empty-child-cidr": {
 			parentCIDR: "192.168.0.0/16",
 			childCIDR:  "",
-			error:      `The child_cidr argument must be provided and valid.`,
+			error:      `The child_cidr argument must be provided and valid`,
 		},
 		"invalid-parent-cidr": {
 			parentCIDR: "invalid-cidr",
