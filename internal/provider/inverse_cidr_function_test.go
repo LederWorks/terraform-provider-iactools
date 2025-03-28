@@ -7,10 +7,10 @@ package provider
 import (
 	"fmt"
 	"regexp"
-	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
@@ -41,12 +41,32 @@ func TestInverseCidrFunction_Valid(t *testing.T) {
 				ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 				Steps: []resource.TestStep{
 					{
-						Config: fmt.Sprintf(`
-							output "result" {
-								value = provider::iactools::inverse_cidr("%s", "%s")
-							}
+						Config: fmt.Sprintf(`  
+							data "iactools_inverse_cidr" "test" {  
+								parent_cidr = "%s"  
+								child_cidr  = "%s"  
+							}  
+  
+							output "result" {  
+								value = data.iactools_inverse_cidr.test.inverse_cidrs  
+							}  
 						`, testCase.parentCIDR, testCase.childCIDR),
-						Check: resource.TestCheckOutput("result", strings.Join(testCase.inverseCIDRs, ",")),
+						Check: func(s *terraform.State) error {
+							rs := s.RootModule().Outputs["result"]
+							if rs == nil {
+								return fmt.Errorf("output 'result' not found")
+							}
+							got := rs.Value.([]interface{})
+							if len(got) != len(testCase.inverseCIDRs) {
+								return fmt.Errorf("expected %d inverse CIDRs, got %d", len(testCase.inverseCIDRs), len(got))
+							}
+							for i, v := range testCase.inverseCIDRs {
+								if got[i].(string) != v {
+									return fmt.Errorf("expected %s at index %d, got %s", v, i, got[i].(string))
+								}
+							}
+							return nil
+						},
 					},
 				},
 			})
