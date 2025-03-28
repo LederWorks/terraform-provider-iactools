@@ -64,11 +64,11 @@ func (r InverseCIDRFunction) Run(ctx context.Context, req function.RunRequest, r
 
 	// Validate input arguments
 	if parentCIDR == "" {
-		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The parent_cidr argument must be provided and valid."))
+		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The parent_cidr argument must be provided and valid"))
 		return
 	}
 	if childCIDR == "" {
-		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The child_cidr argument must be provided and valid."))
+		resp.Error = function.ConcatFuncErrors(resp.Error, function.NewFuncError("The child_cidr argument must be provided and valid"))
 		return
 	}
 
