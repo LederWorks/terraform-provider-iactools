@@ -84,6 +84,7 @@ func (p *iactoolsProvider) DataSources(ctx context.Context) []func() datasource.
 func (p *iactoolsProvider) Functions(ctx context.Context) []func() function.Function {
 	return []func() function.Function{
 		NewInverseCIDRFunction,
+		NewReverseDNSFunction,
 	}
 }
 

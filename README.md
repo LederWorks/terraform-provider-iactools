@@ -1,18 +1,16 @@
-# Terraform Provider Scaffolding (Terraform Plugin Framework)
+<a href="https://terraform.io">
+    <img src=".github/tf.png" alt="Terraform logo" title="Terraform" align="left" height="50" />
+</a>
 
-_This template repository is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework). The template repository built on the [Terraform Plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk) can be found at [terraform-provider-scaffolding](https://github.com/hashicorp/terraform-provider-scaffolding). See [Which SDK Should I Use?](https://developer.hashicorp.com/terraform/plugin/framework-benefits) in the Terraform documentation for additional information._
+# LederWorks IaC Tools Terraform Provider
 
-This repository is a *template* for a [Terraform](https://www.terraform.io) provider. It is intended as a starting point for creating Terraform providers, containing:
+The iactools Terraform Provider brings custom functions which is not possible to implement with pure terraform logic.
 
-- A resource and a data source (`internal/provider/`),
-- Examples (`examples/`) and generated documentation (`docs/`),
-- Miscellaneous meta files.
+When using the iactools provider we recommend using the latest version of Terraform Core ([the latest version can be found here](https://developer.hashicorp.com/terraform/install)).
 
-These files contain boilerplate code that you will need to edit to create your own Terraform provider. Tutorials for creating Terraform providers can be found on the [HashiCorp Developer](https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework) platform. _Terraform Plugin Framework specific guides are titled accordingly._
-
-Please see the [GitHub template repository documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) for how to create a new repository from this template on GitHub.
-
-Once you've written your provider, you'll want to [publish it on the Terraform Registry](https://developer.hashicorp.com/terraform/registry/providers/publishing) so that others can use it.
+* [Terraform Website](https://www.terraform.io)
+* [IaC Tools Provider Documentation](https://registry.terraform.io/providers/lederworks/iactools/latest/docs)
+* [IaC Tools Provider Usage Examples](https://github.com/lederworks/terraform-provider-iactools/tree/main/examples)
 
 ## Requirements
 
@@ -45,7 +43,27 @@ Then commit the changes to `go.mod` and `go.sum`.
 
 ## Using the provider
 
-Fill this in for each provider
+```hcl
+# 1. Specify the version of the IaC Tools Provider to use
+terraform {
+  required_providers {
+    iactools = {
+      source = "lederworks/iactools"
+      version = "0.2.0"
+    }
+  }
+}
+
+# 2. Configure the IaC Tools Provider
+provider "iactools" {
+ # requires no configuration
+}
+
+# 3. Run the inverse_cidr function
+output "inverse_cidr" {
+  value = provider::iactools::inverse_cidr("192.168.0.0/16", "192.168.1.0/24")
+}
+```
 
 ## Developing the Provider
 
