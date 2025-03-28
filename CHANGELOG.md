@@ -1,3 +1,9 @@
+<!--
+Copyright (c) LederWorks
+SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+SPDX-License-Identifier: MPL-2.0
+-->
+
 ## 0.2.0 (Unreleased)
 FEATURES:
 - Added CodeQL workflow
@@ -11,6 +17,7 @@ ENHANCEMENTS:
 - Added SECURITY.md
 - Updated README.md
 - Updated CODE_OF_CONDUCT.md
+- Improved documentation
 
 ## 0.1.0 (Unreleased)
 

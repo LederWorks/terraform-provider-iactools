@@ -1,3 +1,9 @@
+<!--
+Copyright (c) LederWorks
+SPDX-FileCopyrightText: The terraform-provider-iactools Authors
+SPDX-License-Identifier: MPL-2.0
+-->
+
 <a href="https://terraform.io">
     <img src=".github/tf.png" alt="Terraform logo" title="Terraform" align="left" height="50" />
 </a>
