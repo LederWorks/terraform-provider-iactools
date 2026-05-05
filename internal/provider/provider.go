@@ -8,6 +8,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/hashicorp/terraform-plugin-framework/action"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/ephemeral"
 	"github.com/hashicorp/terraform-plugin-framework/function"
@@ -20,6 +21,7 @@ import (
 // Ensure iactoolsProvider satisfies various provider interfaces.
 var _ provider.Provider = &iactoolsProvider{}
 var _ provider.ProviderWithFunctions = &iactoolsProvider{}
+var _ provider.ProviderWithActions = &iactoolsProvider{}
 var _ provider.ProviderWithEphemeralResources = &iactoolsProvider{}
 
 // iactoolsProvider defines the provider implementation.
@@ -86,6 +88,10 @@ func (p *iactoolsProvider) Functions(ctx context.Context) []func() function.Func
 		NewInverseCIDRFunction,
 		NewReverseDNSFunction,
 	}
+}
+
+func (p *iactoolsProvider) Actions(ctx context.Context) []func() action.Action {
+	return []func() action.Action{}
 }
 
 // New creates a new instance of the iactools provider with the specified version.
