@@ -34,6 +34,7 @@ func TestInverseCidrFunction(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 				TerraformDir: "../functions/inverse_cidr",
+				TerraformBinary: "terraform",
 				Vars: map[string]interface{}{
 					"parent_cidr": testCase.parentCIDR,
 					"child_cidr":  testCase.childCIDR,

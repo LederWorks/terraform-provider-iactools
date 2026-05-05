@@ -42,6 +42,7 @@ func TestReverseDnsFunction(t *testing.T) {
 
 			terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 				TerraformDir: "../functions/reverse_dns",
+				TerraformBinary: "terraform",
 				Vars: map[string]interface{}{
 					"ip_address": testCase.ipAddress,
 				},
