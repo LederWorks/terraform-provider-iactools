@@ -129,7 +129,7 @@ jobs:
           cat > "$HOME/.terraformrc" <<EOF
           provider_installation {
             dev_overrides {
-              "localhost/lederworks/iactools" = "$(go env GOPATH)/bin"
+              "registry.terraform.io/lederworks/iactools" = "$(go env GOPATH)/bin"
             }
             direct {}
           }
