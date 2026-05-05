@@ -45,8 +45,8 @@ func TestInverseCidrFunction(t *testing.T) {
 			terraform.InitAndApplyAndIdempotent(t, terraformOptions)
 
 			expectedOutput := strings.Join(testCase.inverseCIDRs, ",")
-			actualOutput := terraform.Output(t, terraformOptions, "inverse_cidr")
-			assert.Equal(t, expectedOutput, actualOutput, "inverse_cidr")
+			actualOutput := terraform.Output(t, terraformOptions, "inverse_cidrs")
+			assert.Equal(t, expectedOutput, actualOutput, "inverse_cidrs")
 		})
 	}
 }
