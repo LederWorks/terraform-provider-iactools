@@ -135,6 +135,6 @@ jobs:
           }
           EOF
       - name: Run Terratest Tests
-        env:
-          TF_CLI_CONFIG_FILE: ${{ env.HOME }}/.terraformrc
-        run: go test -parallel=4 -timeout=900s ./terratest/tests
+        run: |
+          export TF_CLI_CONFIG_FILE="$HOME/.terraformrc"
+          go test -parallel=4 -timeout=900s ./terratest/tests

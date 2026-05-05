@@ -6,7 +6,6 @@ terraform {
   required_providers {
     iactools = {
       source  = "lederworks/iactools"
-      version = "9999.99.99"
     }
   }
 }
