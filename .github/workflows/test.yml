@@ -124,5 +124,17 @@ jobs:
           terraform_wrapper: false
       - name: Install Provider
         run: make install
+      - name: Configure Terraform CLI for local provider
+        run: |
+          cat > "$HOME/.terraformrc" <<EOF
+          provider_installation {
+            dev_overrides {
+              "localhost/lederworks/iactools" = "$(go env GOPATH)/bin"
+            }
+            direct {}
+          }
+          EOF
       - name: Run Terratest Tests
+        env:
+          TF_CLI_CONFIG_FILE: ${{ env.HOME }}/.terraformrc
         run: go test -parallel=4 -timeout=900s ./terratest/tests
