@@ -65,9 +65,9 @@ provider "iactools" {
  # requires no configuration
 }
 
-# 3. Run the inverse_cidr function
-output "inverse_cidr" {
-  value = provider::iactools::inverse_cidr("192.168.0.0/16", "192.168.1.0/24")
+# 3. Run the inverse_cidrs function
+output "inverse_cidrs" {
+  value = provider::iactools::inverse_cidrs("192.168.0.0/16", "192.168.1.0/24")
 }
 ```
 

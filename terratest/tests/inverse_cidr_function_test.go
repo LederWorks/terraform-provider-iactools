@@ -33,7 +33,8 @@ func TestInverseCidrFunction(t *testing.T) {
 	for name, testCase := range testCases {
 		t.Run(name, func(t *testing.T) {
 			terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-				TerraformDir: "../functions/inverse_cidr",
+				TerraformDir:    "../functions/inverse_cidr",
+				TerraformBinary: "terraform",
 				Vars: map[string]interface{}{
 					"parent_cidr": testCase.parentCIDR,
 					"child_cidr":  testCase.childCIDR,
@@ -44,8 +45,8 @@ func TestInverseCidrFunction(t *testing.T) {
 			terraform.InitAndApplyAndIdempotent(t, terraformOptions)
 
 			expectedOutput := strings.Join(testCase.inverseCIDRs, ",")
-			actualOutput := terraform.Output(t, terraformOptions, "inverse_cidr")
-			assert.Equal(t, expectedOutput, actualOutput, "inverse_cidr")
+			actualOutput := terraform.Output(t, terraformOptions, "inverse_cidrs")
+			assert.Equal(t, expectedOutput, actualOutput, "inverse_cidrs")
 		})
 	}
 }
